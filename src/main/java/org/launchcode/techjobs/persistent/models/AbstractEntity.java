@@ -15,7 +15,7 @@ public abstract class AbstractEntity {
     private int id;
 
     @NotBlank           //Added this, so user cannot leave field blank
-    @Size(max = 60)     //Added this as reasonable limitations on size of name string
+    @Size(min =3, max = 100)     //Added this as reasonable limitations on size of name string
     private String name;
 
     public int getId() {

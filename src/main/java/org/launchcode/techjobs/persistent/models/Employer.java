@@ -12,11 +12,11 @@ import java.util.List;
 public class Employer extends AbstractEntity {
 
     @NotBlank           //Added this, so user cannot leave field blank
-    @Size(max = 50)     //Added this as reasonable limitations on size of location string
+    @Size(min =3, max = 100)     //Added this as reasonable limitations on size of location string
     private String location;
 
     @OneToMany(mappedBy = "employer")
-    @JoinColumn
+    @JoinColumn(name = "employer_id")
     private final List<Job> jobs = new ArrayList<>();
 
     public Employer() { //Added this so Hibernate can create an object
