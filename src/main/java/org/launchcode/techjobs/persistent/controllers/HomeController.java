@@ -13,6 +13,8 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -50,7 +52,7 @@ public class HomeController {
 
     @PostMapping("add")
     public String processAddJobForm(@ModelAttribute @Valid Job newJob,
-                                       Errors errors, Model model, @RequestParam(required = false) int employerId, @RequestParam(required = false) List<Skill> skills) {
+                                       Errors errors, Model model, @RequestParam int employerId, @RequestParam List<Skill> skills) {
 
         if (errors.hasErrors()) {
             model.addAttribute("title", "Add Job");
@@ -58,17 +60,15 @@ public class HomeController {
             model.addAttribute("skills", skillRepository.findAll());
             return "add";
         } else {
-            Optional<Employer> resultEmployer = employerRepository.findById(employerId);
-            if (resultEmployer.isEmpty()) {
-                model.addAttribute("title", "Invalid Employer ID: " + employerId);
-            } else {
-                Employer employer = resultEmployer.get();
+            if (employerRepository.findById(employerId).isPresent()) {
+                Employer employer = employerRepository.findById(employerId).get();
                 newJob.setEmployer(employer);
             }
-            if (skills.isEmpty()) {
-                model.addAttribute("title", "Invalid Skill List: " + skills);
+            List<Integer> skillIds = new ArrayList<>();
+            for (Skill skill : skills){
+                    skillIds.add(skill.getId());
             }
-            newJob.setSkills(skills);
+            newJob.setSkills((List<Skill>) skillRepository.findAllById(skillIds));
             jobRepository.save(newJob); //added this without being prompted
             return "redirect:";
         }
