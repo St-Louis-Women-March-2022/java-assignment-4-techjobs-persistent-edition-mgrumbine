@@ -15,8 +15,8 @@ public class Employer extends AbstractEntity {
     @Size(min =3, max = 100)     //Added this as reasonable limitations on size of location string
     private String location;
 
-    @OneToMany(mappedBy = "employer")
-    @JoinColumn(name = "employer_id")
+    @OneToMany
+    @JoinColumn(name = "employer_id")  //this is throwing a Hibernate error and the code won't compile
     private final List<Job> jobs = new ArrayList<>();
 
     public Employer() { //Added this so Hibernate can create an object

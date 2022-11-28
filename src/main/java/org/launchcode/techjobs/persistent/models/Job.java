@@ -2,6 +2,7 @@ package org.launchcode.techjobs.persistent.models;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @Entity
 public class Job extends AbstractEntity{
@@ -9,6 +10,7 @@ public class Job extends AbstractEntity{
     @ManyToOne
     @NotNull
     private Employer employer;
+
     private String skills;
 
     public Job() {
@@ -35,4 +37,5 @@ public class Job extends AbstractEntity{
     public void setSkills(String skills) {
         this.skills = skills;
     }
+
 }
