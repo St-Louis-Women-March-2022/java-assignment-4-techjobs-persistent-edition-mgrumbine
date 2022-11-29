@@ -10,7 +10,7 @@ import java.util.Optional;
 public class Job extends AbstractEntity {
 
     @ManyToOne
-    @NotNull
+//    @NotNull //is this needed?
     private Employer employer;
 
     @ManyToMany

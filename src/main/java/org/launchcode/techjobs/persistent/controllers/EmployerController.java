@@ -9,6 +9,7 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("employers")
@@ -45,11 +46,13 @@ public class EmployerController {
     @GetMapping("view/{employerId}")
     public String displayViewEmployer(Model model, @PathVariable int employerId) {
 
-//        if (!employerRepository.existsById(employerId)) { //commenting this out to make the tests pass
-            model.addAttribute("employer", employerRepository.findById(employerId));
+        Optional optEmployer = employerRepository.findById(employerId);
+        if (optEmployer.isPresent()) {
+            Employer employer = (Employer) optEmployer.get();
+            model.addAttribute("employer", employer);
             return "employers/view";
-//        } else {                                    //commenting this out to make the tests pass
-//            return "redirect:../";
-//        }
+        } else {
+            return "redirect:../";
+        }
     }
 }

@@ -1,5 +1,6 @@
 package org.launchcode.techjobs.persistent.controllers;
 
+import org.launchcode.techjobs.persistent.models.Employer;
 import org.launchcode.techjobs.persistent.models.Skill;
 import org.launchcode.techjobs.persistent.models.data.SkillRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("skills")
@@ -45,11 +47,13 @@ public class SkillController {
     @GetMapping("view/{skillId}")
     public String displayViewSkill(Model model, @PathVariable int skillId) {
 
- //       if (skillRepository.existsById(skillId)) { //commenting this out to make the tests pass
-            model.addAttribute("skills", skillRepository.findById(skillId));
-            return "skills/view";
-//        } else {                      //commenting this out to make the tests pass
-//            return "redirect:../";
-//        }
+        Optional optSkill = skillRepository.findById(skillId);
+        if (optSkill.isPresent()) {
+            Employer employer = (Employer) optSkill.get();
+            model.addAttribute("employer", employer);
+            return "employers/view";
+        } else {
+            return "redirect:../";
+        }
     }
 }
