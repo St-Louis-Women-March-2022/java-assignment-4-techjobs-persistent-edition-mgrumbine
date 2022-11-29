@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Created by LaunchCode
@@ -50,7 +51,7 @@ public class HomeController {
 
     @PostMapping("add")
     public String processAddJobForm(@ModelAttribute @Valid Job newJob,
-                                       Errors errors, Model model, @RequestParam @Valid int employerId, @RequestParam @Valid List<Integer> skills) {
+                                       Errors errors, Model model, @RequestParam int employerId, @RequestParam List<Integer> skills) {
 
         if (errors.hasErrors()) {
             model.addAttribute("title", "Add Job");
@@ -58,8 +59,12 @@ public class HomeController {
             model.addAttribute("skills", skillRepository.findAll());
             return "add";
         } else {
-            Employer employerObj = employerRepository.findById(employerId).get();
-            newJob.setEmployer(employerObj);
+
+            Optional optEmployer = employerRepository.findById(employerId);
+            if (optEmployer.isPresent()) {
+                Employer employer = (Employer) optEmployer.get();
+                newJob.setEmployer(employer);
+            }
             List<Skill> skillObjs = (List<Skill>) skillRepository.findAllById(skills);
             newJob.setSkills(skillObjs);
             jobRepository.save(newJob); //added this without being prompted
