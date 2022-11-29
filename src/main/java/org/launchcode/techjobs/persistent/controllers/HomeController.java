@@ -76,7 +76,7 @@ public class HomeController {
     public String displayViewJob(Model model, @PathVariable int jobId) {
 
         if (jobRepository.existsById(jobId)) {
-            model.addAttribute("job", jobRepository.findById(jobId)); //added this whole thing without being prompted
+            model.addAttribute("job", jobRepository.findById(jobId).get()); //added this whole thing without being prompted
             return "view";
         } else {
             return "redirect:../";
